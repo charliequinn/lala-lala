@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: IAM role for ECS task's Project lala-lala
+Resources:
+  TaskRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: lala-lalaTaskRole
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ecs-tasks.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Policies:
+        - PolicyName: lala-lalalogs
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Resource: arn:aws:logs:us-east-2:502937263541:log-group:lala-lala:*
+                Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+        - PolicyName: lala-lalaCredentials
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Resource: arn:aws:secretsmanager:us-east-2:502937263541:secret:lala-lala-*
+                Effect: Allow
+                Action:
+                  - secretsmanager:GetSecretValue
+Outputs:
+  TaskRoleArn:
+    Value: !Ref TaskRole
+    Description: ARN of Task Role
